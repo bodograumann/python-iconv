@@ -138,18 +138,12 @@ static PyMethodDef Iconv_methods[] = {
 	{NULL,		NULL}		/* sentinel */
 };
 
-static PyObject *
-Iconv_getattr(PyObject *self, char *name)
-{
-	return Py_FindMethod(Iconv_methods, self, name);
-}
-
 static PyTypeObject Iconv_Type = {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	.tp_name = "Iconv",
 	.tp_basicsize = sizeof(IconvObject),
 	.tp_dealloc = (destructor)Iconv_dealloc,
-	.tp_getattr = (getattrfunc)Iconv_getattr,
+	.tp_methods = Iconv_methods,
 };
 
 static PyMethodDef iconv_methods[] = {
