@@ -8,7 +8,7 @@ typedef struct {
 
 static PyObject *error;
 
-staticforward PyTypeObject Iconv_Type;
+static PyTypeObject Iconv_Type;
 
 static char iconv_open__doc__[]=
 "open(tocode, fromcode) -> iconv handle\n"
@@ -144,7 +144,7 @@ Iconv_getattr(PyObject *self, char *name)
 	return Py_FindMethod(Iconv_methods, self, name);
 }
 
-statichere PyTypeObject Iconv_Type = {
+static PyTypeObject Iconv_Type = {
 	PyObject_HEAD_INIT(NULL)
 	0,			/*ob_size*/
 	"Iconv",		/*tp_name*/
