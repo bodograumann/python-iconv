@@ -145,21 +145,11 @@ Iconv_getattr(PyObject *self, char *name)
 }
 
 static PyTypeObject Iconv_Type = {
-	PyVarObject_HEAD_INIT(NULL, 0)	/*ob_size*/
-	"Iconv",		/*tp_name*/
-	sizeof(IconvObject),	/*tp_basicsize*/
-	0,			/*tp_itemsize*/
-	/* methods */
-	(destructor)Iconv_dealloc, /*tp_dealloc*/
-	0,			/*tp_print*/
-	(getattrfunc)Iconv_getattr, /*tp_getattr*/
-	0,			/*tp_setattr*/
-	0,			/*tp_compare*/
-	0,			/*tp_repr*/
-	0,			/*tp_as_number*/
-	0,			/*tp_as_sequence*/
-	0,			/*tp_as_mapping*/
-	0,			/*tp_hash*/
+	PyVarObject_HEAD_INIT(NULL, 0)
+	.tp_name = "Iconv",
+	.tp_basicsize = sizeof(IconvObject),
+	.tp_dealloc = (destructor)Iconv_dealloc,
+	.tp_getattr = (getattrfunc)Iconv_getattr,
 };
 
 static PyMethodDef iconv_methods[] = {
@@ -181,14 +171,10 @@ PyInit_iconv(void)
 	/* Create the module and add the functions */
 	static struct PyModuleDef moduledef = {
 		PyModuleDef_HEAD_INIT,
-		"iconv",             /* m_name */
-		__doc__,             /* m_doc */
-		-1,                  /* m_size */
-		iconv_methods,       /* m_methods */
-		NULL,                /* m_reload */
-		NULL,                /* m_traverse */
-		NULL,                /* m_clear */
-		NULL,                /* m_free */
+		.m_name = "iconv",
+		.m_doc = __doc__,
+		.m_size = -1,
+		.m_methods = iconv_methods,
 	};
 	m = PyModule_Create(&moduledef);
 
