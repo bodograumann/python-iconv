@@ -55,7 +55,7 @@ Iconv_iconv(IconvObject *self, PyObject *args, PyObject* kwargs)
 	const char *inbuf;
 	char *outbuf;
 	size_t inbuf_size, outbuf_size, iresult;
-	int inbuf_size_int, outbuf_size_int = -1;
+	long int inbuf_size_int, outbuf_size_int = -1;
 	int return_unicode = 0, count_only = 0;
 	PyObject *result;
 	static char *kwarg_names[]={
@@ -100,23 +100,23 @@ Iconv_iconv(IconvObject *self, PyObject *args, PyObject* kwargs)
 		outbuf_size = outbuf_size_int*2;
 	}else{
 		/* Allocate the result string. */
-		result = PyString_FromStringAndSize(NULL, outbuf_size_int);
+		result = PyBytes_FromStringAndSize(NULL, outbuf_size_int);
 		if (!result)
 			return NULL;
-		outbuf = PyString_AS_STRING(result);
+		outbuf = PyBytes_AS_STRING(result);
 		outbuf_size = outbuf_size_int;
 	}
 	/* Perform the conversion. */
 	iresult = iconv(self->handle, &inbuf, &inbuf_size, &outbuf, &outbuf_size);
 	if (count_only){
-		result = PyInt_FromLong(outbuf_size_int-outbuf_size);
+		result = PyLong_FromLong(outbuf_size_int-outbuf_size);
 	}else if (return_unicode) {
 		/* If the conversion was successful, the result string may be
 		   larger than necessary; outbuf_size will present the extra
 		   bytes. */
 		PyUnicode_Resize(&result, outbuf_size_int-outbuf_size/2);
 	}else{
-		_PyString_Resize(&result, outbuf_size_int-outbuf_size);
+		_PyBytes_Resize(&result, outbuf_size_int-outbuf_size);
 	}
 
 	if (iresult == -1){
