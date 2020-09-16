@@ -172,7 +172,7 @@ static PyMethodDef iconv_methods[] = {
 static char __doc__[]=
 "The iconv module provides an interface to the iconv library.";
 
-DL_EXPORT(void)
+PyMODINIT_FUNC
 initiconv(void)
 {
 	PyObject *m, *d;
