@@ -172,18 +172,30 @@ static char __doc__[]=
 "The iconv module provides an interface to the iconv library.";
 
 PyMODINIT_FUNC
-initiconv(void)
+PyInit_iconv(void)
 {
 	PyObject *m, *d;
 
 	Py_TYPE(&Iconv_Type) = &PyType_Type;
 
 	/* Create the module and add the functions */
-	m = Py_InitModule4("iconv", iconv_methods, __doc__, 
-			   NULL, PYTHON_API_VERSION);
+	static struct PyModuleDef moduledef = {
+		PyModuleDef_HEAD_INIT,
+		"iconv",             /* m_name */
+		__doc__,             /* m_doc */
+		-1,                  /* m_size */
+		iconv_methods,       /* m_methods */
+		NULL,                /* m_reload */
+		NULL,                /* m_traverse */
+		NULL,                /* m_clear */
+		NULL,                /* m_free */
+	};
+	m = PyModule_Create(&moduledef);
 
 	/* Add some symbolic constants to the module */
 	d = PyModule_GetDict(m);
 	error = PyErr_NewException("iconv.error", PyExc_ValueError, NULL);
 	PyDict_SetItemString(d, "error", error);
+
+	return m;
 }
