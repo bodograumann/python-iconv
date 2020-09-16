@@ -145,8 +145,7 @@ Iconv_getattr(PyObject *self, char *name)
 }
 
 static PyTypeObject Iconv_Type = {
-	PyObject_HEAD_INIT(NULL)
-	0,			/*ob_size*/
+	PyVarObject_HEAD_INIT(NULL, 0)	/*ob_size*/
 	"Iconv",		/*tp_name*/
 	sizeof(IconvObject),	/*tp_basicsize*/
 	0,			/*tp_itemsize*/
@@ -177,7 +176,7 @@ initiconv(void)
 {
 	PyObject *m, *d;
 
-	Iconv_Type.ob_type = &PyType_Type;
+	Py_TYPE(&Iconv_Type) = &PyType_Type;
 
 	/* Create the module and add the functions */
 	m = Py_InitModule4("iconv", iconv_methods, __doc__, 
