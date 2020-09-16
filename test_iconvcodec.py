@@ -1,4 +1,4 @@
 import iconvcodec
 
-print u"Hallo".encode("T.61")
-print repr(unicode("Hallo","T.61"))
+print("Hallo".encode("T.61"))
+print(repr(b"Hallo".decode("T.61")))

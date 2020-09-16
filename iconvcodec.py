@@ -7,7 +7,7 @@ if sys.platform.startswith("linux"):
     unicodename = "unicode"+sys.byteorder
 else:
     # may need to try UCS-2, UCS-2-LE/BE, Unicode, ...
-    raise ImportError,"cannot establish name of 2-byte Unicode"
+    raise ImportError("cannot establish name of 2-byte Unicode")
 
 class Codec(codecs.Codec):
     def __init__(self):
@@ -17,8 +17,8 @@ class Codec(codecs.Codec):
     def encode(self, msg, errors = 'strict'):
         try:
             return self.encoder.iconv(msg),len(msg)
-        except iconv.error,e:
-            print e
+        except iconv.error as e:
+            print(e)
             errstring,code,inlen,outres=e.args
             assert inlen % 2 == 0
             inlen /= 2
@@ -48,7 +48,7 @@ class Codec(codecs.Codec):
     def decode(self, msg, errors = 'strict'):
         try:
             return self.decoder.iconv(msg, return_unicode=1),len(msg)
-        except iconv.error,e:
+        except iconv.error as e:
             errstring,code,inlen,outres = e.args
             if code == errno.E2BIG:
                 # buffer too small
