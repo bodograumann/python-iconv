@@ -1,8 +1,8 @@
 import unittest
 import iconvcodec
 
-class TestIconvcodecModule(unittest.TestCase):
 
+class TestIconvcodecModule(unittest.TestCase):
     def test_encode(self):
         bytestring = "Hallo".encode("T.61")
         self.assertEqual(bytestring, b"Hallo")
