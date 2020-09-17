@@ -1,13 +1,6 @@
 import sys, iconv, codecs, errno
 
-# First we need to find out what the Unicode code set name is
-# in this iconv implementation
-
-if sys.platform.startswith("linux"):
-    unicodename = "unicode"+sys.byteorder
-else:
-    # may need to try UCS-2, UCS-2-LE/BE, Unicode, ...
-    raise ImportError("cannot establish name of 2-byte Unicode")
+unicodename = "utf-8"
 
 class Codec(codecs.Codec):
     def __init__(self):
@@ -16,7 +9,7 @@ class Codec(codecs.Codec):
         
     def encode(self, msg, errors = 'strict'):
         try:
-            return self.encoder.iconv(msg),len(msg)
+            return self.encoder.iconv(msg.encode()),len(msg)
         except iconv.error as e:
             print(e)
             errstring,code,inlen,outres=e.args
@@ -47,7 +40,7 @@ class Codec(codecs.Codec):
 
     def decode(self, msg, errors = 'strict'):
         try:
-            return self.decoder.iconv(msg, return_unicode=1),len(msg)
+            return self.decoder.iconv(msg).decode(),len(msg)
         except iconv.error as e:
             errstring,code,inlen,outres = e.args
             if code == errno.E2BIG:

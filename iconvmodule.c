@@ -44,7 +44,7 @@ Iconv_dealloc(IconvObject *self)
 }
 
 static char Iconv_iconv__doc__[]=
-"iconv(in[, outlen[, return_unicode[, count_only]]]) -> out\n"
+"iconv(in[, outlen[, count_only]]) -> out\n"
 "Convert in to out. outlen is the size of the output buffer;\n"
 "it defaults to len(in).";
 
@@ -56,19 +56,17 @@ Iconv_iconv(IconvObject *self, PyObject *args, PyObject* kwargs)
 	char *outbuf;
 	size_t inbuf_size, outbuf_size, iresult;
 	long int inbuf_size_int, outbuf_size_int = -1;
-	int return_unicode = 0, count_only = 0;
+	int count_only = 0;
 	PyObject *result;
 	static char *kwarg_names[]={
 		"s",
 		"outlen",
-		"return_unicode",
 		"count_only",
 		NULL
 	};
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, 
 					 "O|lii:iconv", kwarg_names,
-					 &inbuf_obj, &outbuf_size_int,
-					 &return_unicode, &count_only))
+					 &inbuf_obj, &outbuf_size_int, &count_only))
 		return NULL;
 
 	if (inbuf_obj == Py_None){
@@ -81,7 +79,7 @@ Iconv_iconv(IconvObject *self, PyObject *args, PyObject* kwargs)
 			return NULL;
 	}else{
 		PyErr_SetString(PyExc_TypeError, 
-				"iconv expects string as first argument");
+				"iconv expects byte object as first argument");
 		return NULL;
 	}
 	/* If no result size estimate was given, estimate that the result
@@ -93,11 +91,6 @@ Iconv_iconv(IconvObject *self, PyObject *args, PyObject* kwargs)
 		result = NULL;
 		outbuf = NULL;
 		outbuf_size = outbuf_size_int;
-	}else if(return_unicode){
-		/* Allocate the result string. */
-		result = PyUnicode_FromUnicode(NULL, outbuf_size_int);
-		outbuf = (char*)PyUnicode_AS_UNICODE(result);
-		outbuf_size = outbuf_size_int*2;
 	}else{
 		/* Allocate the result string. */
 		result = PyBytes_FromStringAndSize(NULL, outbuf_size_int);
@@ -110,11 +103,6 @@ Iconv_iconv(IconvObject *self, PyObject *args, PyObject* kwargs)
 	iresult = iconv(self->handle, &inbuf, &inbuf_size, &outbuf, &outbuf_size);
 	if (count_only){
 		result = PyLong_FromLong(outbuf_size_int-outbuf_size);
-	}else if (return_unicode) {
-		/* If the conversion was successful, the result string may be
-		   larger than necessary; outbuf_size will present the extra
-		   bytes. */
-		PyUnicode_Resize(&result, outbuf_size_int-outbuf_size/2);
 	}else{
 		_PyBytes_Resize(&result, outbuf_size_int-outbuf_size);
 	}
