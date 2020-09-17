@@ -10,9 +10,10 @@ static PyObject *error;
 
 static PyTypeObject Iconv_Type;
 
-static char iconv_open__doc__[]=
-    "open(tocode, fromcode) -> iconv handle\n"
-    "allocate descriptor for character set conversion";
+PyDoc_STRVAR(iconv_open__doc__,
+             "open(tocode, fromcode) -> iconv handle\n\n"
+             "allocate descriptor for character set conversion"
+            );
 
 static PyObject*
 py_iconv_open(PyObject* unused, PyObject* args)
@@ -43,10 +44,11 @@ Iconv_dealloc(IconvObject *self)
     PyObject_Del(self);
 }
 
-static char Iconv_iconv__doc__[]=
-    "iconv(in[, outlen[, count_only]]) -> out\n"
-    "Convert in to out. outlen is the size of the output buffer;\n"
-    "it defaults to len(in).";
+PyDoc_STRVAR(Iconv_iconv__doc__,
+             "iconv(in[, outlen[, count_only]]) -> out\n\n"
+             "Convert in to out. outlen is the size of the output buffer;\n"
+             "it defaults to len(in)."
+            );
 
 static PyObject*
 Iconv_iconv(IconvObject *self, PyObject *args, PyObject* kwargs)
@@ -142,8 +144,9 @@ static PyMethodDef iconv_methods[] = {
     {NULL, NULL} /* sentinel */
 };
 
-static char __doc__[]=
-    "The iconv module provides an interface to the iconv library.";
+PyDoc_STRVAR(__doc__,
+             "The iconv module provides an interface to the iconv library."
+            );
 
 PyMODINIT_FUNC
 PyInit_iconv(void)
