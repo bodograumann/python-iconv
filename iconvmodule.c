@@ -55,6 +55,7 @@ static PyObject*
 Iconv_iconv(IconvObject *self, PyObject *args, PyObject* kwargs)
 {
     PyObject *inbuf_obj;
+    Py_buffer inbuf_view;
     const char *inbuf;
     char *outbuf;
     size_t inbuf_size, outbuf_size, iresult;
@@ -77,14 +78,17 @@ Iconv_iconv(IconvObject *self, PyObject *args, PyObject* kwargs)
         /* None means to clear the iconv object */
         inbuf = NULL;
         inbuf_size_int = 0;
-    } else if (!inbuf_obj->ob_type->tp_as_buffer) {
+    } else if (!PyObject_CheckBuffer(inbuf_obj)) {
         PyErr_SetString(PyExc_TypeError,
                         "iconv expects byte object as first argument");
         return NULL;
-    } else if (PyObject_AsReadBuffer(inbuf_obj, (const void**)&inbuf,
-                                     &inbuf_size_int) == -1) {
+    } else if (PyObject_GetBuffer(inbuf_obj, &inbuf_view, PyBUF_SIMPLE) < 0) {
         return NULL;
+    } else {
+        inbuf = inbuf_view.buf;
+        inbuf_size_int = inbuf_view.len;
     }
+
     /* If no result size estimate was given, estimate that the result
        string is the same size as the input string. */
     if (outbuf_size_int == -1) {
@@ -106,6 +110,9 @@ Iconv_iconv(IconvObject *self, PyObject *args, PyObject* kwargs)
     }
     /* Perform the conversion. */
     iresult = iconv(self->handle, &inbuf, &inbuf_size, &outbuf, &outbuf_size);
+
+    PyBuffer_Release(&inbuf_view);
+
     if (count_only) {
         result = PyLong_FromLong(outbuf_size_int-outbuf_size);
     } else {
