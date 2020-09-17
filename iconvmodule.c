@@ -21,8 +21,9 @@ py_iconv_open(PyObject* unused, PyObject* args)
     char *tocode, *fromcode;
     iconv_t result;
     IconvObject *self;
-    if (!PyArg_ParseTuple(args, "ss", &tocode, &fromcode))
+    if (!PyArg_ParseTuple(args, "ss", &tocode, &fromcode)) {
         return NULL;
+    }
     result = iconv_open(tocode, fromcode);
     if (result == (iconv_t)(-1)) {
         PyErr_SetFromErrno(PyExc_ValueError);
@@ -68,8 +69,9 @@ Iconv_iconv(IconvObject *self, PyObject *args, PyObject* kwargs)
     };
     if (!PyArg_ParseTupleAndKeywords(args, kwargs,
                                      "O|lii:iconv", kwarg_names,
-                                     &inbuf_obj, &outbuf_size_int, &count_only))
+                                     &inbuf_obj, &outbuf_size_int, &count_only)) {
         return NULL;
+    }
 
     if (inbuf_obj == Py_None) {
         /* None means to clear the iconv object */
@@ -85,8 +87,9 @@ Iconv_iconv(IconvObject *self, PyObject *args, PyObject* kwargs)
     }
     /* If no result size estimate was given, estimate that the result
        string is the same size as the input string. */
-    if (outbuf_size_int == -1)
+    if (outbuf_size_int == -1) {
         outbuf_size_int = inbuf_size_int;
+    }
     inbuf_size = inbuf_size_int;
     if (count_only) {
         result = NULL;
@@ -95,8 +98,9 @@ Iconv_iconv(IconvObject *self, PyObject *args, PyObject* kwargs)
     } else {
         /* Allocate the result string. */
         result = PyBytes_FromStringAndSize(NULL, outbuf_size_int);
-        if (!result)
+        if (!result) {
             return NULL;
+        }
         outbuf = PyBytes_AS_STRING(result);
         outbuf_size = outbuf_size_int;
     }
@@ -153,8 +157,9 @@ PyInit_iconv(void)
     PyObject *m, *d;
 
     Py_TYPE(&Iconv_Type) = &PyType_Type;
-    if (PyType_Ready(&Iconv_Type) < 0)
+    if (PyType_Ready(&Iconv_Type) < 0) {
         return NULL;
+    }
 
     /* Create the module and add the functions */
     static struct PyModuleDef moduledef = {
@@ -164,8 +169,9 @@ PyInit_iconv(void)
         .m_size = -1,
         .m_methods = iconv_methods,
     };
-    if ((m = PyModule_Create(&moduledef)) == NULL)
+    if ((m = PyModule_Create(&moduledef)) == NULL) {
         return NULL;
+    }
 
     /* Add some symbolic constants to the module */
     d = PyModule_GetDict(m);
