@@ -4,7 +4,9 @@ import iconvcodec
 class TestIconvcodecModule(unittest.TestCase):
 
     def test_encode(self):
-        print("Hallo".encode("T.61"))
+        bytestring = "Hallo".encode("T.61")
+        self.assertEqual(bytestring, b"Hallo")
 
     def test_decode(self):
-        print(repr(b"Hallo".decode("T.61")))
+        string = b"Hallo".decode("T.61")
+        self.assertEqual(string, "Hallo")
