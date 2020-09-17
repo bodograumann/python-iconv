@@ -161,6 +161,8 @@ PyInit_iconv(void)
 	PyObject *m, *d;
 
 	Py_TYPE(&Iconv_Type) = &PyType_Type;
+	if (PyType_Ready(&Iconv_Type) < 0)
+	  return NULL;
 
 	/* Create the module and add the functions */
 	static struct PyModuleDef moduledef = {
@@ -170,7 +172,8 @@ PyInit_iconv(void)
 		.m_size = -1,
 		.m_methods = iconv_methods,
 	};
-	m = PyModule_Create(&moduledef);
+	if ((m = PyModule_Create(&moduledef)) == NULL)
+	  return NULL;
 
 	/* Add some symbolic constants to the module */
 	d = PyModule_GetDict(m);
