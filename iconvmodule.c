@@ -66,7 +66,7 @@ Iconv_iconv(IconvObject *self, PyObject *args, PyObject* kwargs)
 		NULL
 	};
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, 
-					 "O|iii:iconv", kwarg_names,
+					 "O|lii:iconv", kwarg_names,
 					 &inbuf_obj, &outbuf_size_int,
 					 &return_unicode, &count_only))
 		return NULL;
