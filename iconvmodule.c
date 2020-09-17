@@ -75,13 +75,12 @@ Iconv_iconv(IconvObject *self, PyObject *args, PyObject* kwargs)
         /* None means to clear the iconv object */
         inbuf = NULL;
         inbuf_size_int = 0;
-    } else if (inbuf_obj->ob_type->tp_as_buffer) {
-        if (PyObject_AsReadBuffer(inbuf_obj, (const void**)&inbuf,
-                                  &inbuf_size_int) == -1)
-            return NULL;
-    } else {
+    } else if (!inbuf_obj->ob_type->tp_as_buffer) {
         PyErr_SetString(PyExc_TypeError,
                         "iconv expects byte object as first argument");
+        return NULL;
+    } else if (PyObject_AsReadBuffer(inbuf_obj, (const void**)&inbuf,
+                                     &inbuf_size_int) == -1) {
         return NULL;
     }
     /* If no result size estimate was given, estimate that the result
