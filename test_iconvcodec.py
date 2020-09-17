@@ -1,4 +1,10 @@
+import unittest
 import iconvcodec
 
-print("Hallo".encode("T.61"))
-print(repr(b"Hallo".decode("T.61")))
+class TestIconvcodecModule(unittest.TestCase):
+
+    def test_encode(self):
+        print("Hallo".encode("T.61"))
+
+    def test_decode(self):
+        print(repr(b"Hallo".decode("T.61")))
