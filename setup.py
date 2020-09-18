@@ -8,7 +8,8 @@ setup(
     author_email="mail@bodograumann.de",
     url="https://github.com/bodograumann/python-iconv",
     long_description="""This is a port of Martin v. Loewis’ original iconv package to Python 3.
-    The iconv module exposes the operating system's iconv character
+
+The iconv module exposes the operating system's iconv character
 conversion routine to Python. This package provides an iconv wrapper
 as well as a Python codec to convert between Unicode objects and
 all iconv-provided encodings.
