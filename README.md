@@ -1,12 +1,13 @@
 Iconv-based codec library for Python
 ====================================
-Written by Martin v. Loewis
+Written by Martin v. Loewis<br>
 Ported to Python 3 by Bodo Graumann
 
 This package provides a set of codecs to Python based on the
 underlying iconv library of the operating system, as available on
 glibc 2, Solaris, or other Unix variants. It consists of two modules:
 `iconv` and `iconvcodec`.
+For common usage the codec interface is more convenient and should be preferred.
 
 Installation
 ------------
@@ -14,7 +15,7 @@ To install the module use
 
     pip install python-iconv
 
-This module package requires atleast Python 3.0.
+This module package requires atleast Python 3.6.
 
 Module iconv
 ------------
