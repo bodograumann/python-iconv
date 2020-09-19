@@ -1,8 +1,8 @@
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 
 setup(
     name="python-iconv",
-    version="1.0",
+    version="1.0.0",
     description="iconv-based Unicode converter",
     author="Bodo Graumann",
     author_email="mail@bodograumann.de",
