@@ -1,15 +1,13 @@
 import sys, iconv, codecs, errno
 
-unicodename = "utf-8"
-
-
 def codec_factory(encoding):
-    encoder = iconv.open(encoding, unicodename)
-    decoder = iconv.open(unicodename, encoding)
+    encoder = iconv.open(encoding, "utf-8")
+    decoder = iconv.open("utf-8", encoding)
 
-    def encode(msg, errors="strict"):
+    def encode(input, errors="strict"):
+        msg = input.encode()
         try:
-            return encoder.iconv(msg.encode()), len(msg)
+            return encoder.iconv(msg), len(msg)
         except iconv.error as e:
             errstring, code, inlen, outres = e.args
             assert inlen % 2 == 0
@@ -45,11 +43,11 @@ def codec_factory(encoding):
             if code == errno.E2BIG:
                 # buffer too small
                 out1, len1 = decode(msg[inlen:], errors)
-                return outres + out1, inlen + len1
+                return outres.decode() + out1, inlen + len1
             if code == errno.EINVAL:
                 # An incomplete multibyte sequence has been
                 # encountered in the input.
-                return outres, inlen
+                return outres.decode(), inlen
             if code == errno.EILSEQ:
                 # An invalid multibyte sequence has been encountered
                 # in the input. Ignoring or replacing it is hard to
@@ -63,7 +61,7 @@ def codec_factory(encoding):
                     out1, len1 = decode(msg[inlen:], errors)
                 else:
                     raise ValueError("unsupported error handling")
-                return outres + out1, inlen + len1
+                return outres.decode() + out1, inlen + len1
 
     return encode, decode
 
