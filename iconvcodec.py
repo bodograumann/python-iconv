@@ -82,6 +82,14 @@ def lookup(encoding):
     class StreamReader(codecs.StreamReader):
         nonlocal decode
 
+    class IncrementalEncoder(codecs.IncrementalEncoder):
+        def encode(self, input, final=False):
+            nonlocal encode
+            return encode(input, self.errors)[0]
+
+    class IncrementalDecoder(codecs.BufferedIncrementalDecoder):
+        nonlocal decode
+        _buffer_decode = decode
 
     return codecs.CodecInfo(
         name=encoding,
@@ -89,6 +97,8 @@ def lookup(encoding):
         decode=decode,
         streamreader=StreamReader,
         streamwriter=StreamWriter,
+        incrementalencoder=IncrementalEncoder,
+        incrementaldecoder=IncrementalDecoder,
     )
 
 
