@@ -87,8 +87,9 @@ def lookup(encoding):
             return encode(input, self.errors)[0]
 
     class IncrementalDecoder(codecs.BufferedIncrementalDecoder):
-        nonlocal decode
-        _buffer_decode = decode
+        def _buffer_decode(self, input, errors, final):
+            nonlocal decode
+            return decode(input, errors)
 
     return codecs.CodecInfo(
         name=encoding,
