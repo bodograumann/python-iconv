@@ -11,7 +11,6 @@ def codec_factory(encoding):
         try:
             return encoder.iconv(msg.encode()), len(msg)
         except iconv.error as e:
-            print(e)
             errstring, code, inlen, outres = e.args
             assert inlen % 2 == 0
             inlen /= 2
