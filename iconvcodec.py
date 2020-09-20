@@ -29,7 +29,7 @@ class Codec(codecs.Codec):
                 # in the input. Used to indicate that the character is
                 # not supported in the target code
                 if errors == "strict":
-                    raise UnicodeError(*args)
+                    raise UnicodeError(*e.args)
                 if errors == "replace":
                     out1, len1 = self.encode(u"?" + msg[inlen + 1 :], errors)
                 elif errors == "ignore":
