@@ -81,7 +81,12 @@ def lookup(encoding):
         pass
 
     try:
-        return SpecialCodec().encode, SpecialCodec().decode, Reader, Writer
+        return codecs.CodecInfo(
+            encode=SpecialCodec().encode,
+            decode=SpecialCodec().decode,
+            streamreader=Reader,
+            streamwriter=Writer,
+        )
     except ValueError:
         return None
 
