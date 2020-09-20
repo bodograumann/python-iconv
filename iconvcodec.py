@@ -3,14 +3,13 @@ import sys, iconv, codecs, errno
 unicodename = "utf-8"
 
 
-class Codec(codecs.Codec):
-    def __init__(self):
-        self.encoder = iconv.open(self.codeset, unicodename)
-        self.decoder = iconv.open(unicodename, self.codeset)
+def codec_factory(encoding):
+    encoder = iconv.open(encoding, unicodename)
+    decoder = iconv.open(unicodename, encoding)
 
-    def encode(self, msg, errors="strict"):
+    def encode(msg, errors="strict"):
         try:
-            return self.encoder.iconv(msg.encode()), len(msg)
+            return encoder.iconv(msg.encode()), len(msg)
         except iconv.error as e:
             print(e)
             errstring, code, inlen, outres = e.args
@@ -18,7 +17,7 @@ class Codec(codecs.Codec):
             inlen /= 2
             if code == errno.E2BIG:
                 # outbuffer was too small, try to encode rest
-                out1, len1 = self.encode(msg[inlen:], errors)
+                out1, len1 = encode(msg[inlen:], errors)
                 return outres + out1, inlen + len1
             if code == errno.EINVAL:
                 # An incomplete multibyte sequence has been
@@ -31,22 +30,22 @@ class Codec(codecs.Codec):
                 if errors == "strict":
                     raise UnicodeError(*e.args)
                 if errors == "replace":
-                    out1, len1 = self.encode(u"?" + msg[inlen + 1 :], errors)
+                    out1, len1 = encode(u"?" + msg[inlen + 1 :], errors)
                 elif errors == "ignore":
-                    out1, len1 = self.encode(msg[inlen + 1 :], errors)
+                    out1, len1 = encode(msg[inlen + 1 :], errors)
                 else:
                     raise ValueError("unsupported error handling")
                 return outres + out1, inlen + 1 + len1
             raise
 
-    def decode(self, msg, errors="strict"):
+    def decode(msg, errors="strict"):
         try:
-            return self.decoder.iconv(msg).decode(), len(msg)
+            return decoder.iconv(msg).decode(), len(msg)
         except iconv.error as e:
             errstring, code, inlen, outres = e.args
             if code == errno.E2BIG:
                 # buffer too small
-                out1, len1 = self.decode(msg[inlen:], errors)
+                out1, len1 = decode(msg[inlen:], errors)
                 return outres + out1, inlen + len1
             if code == errno.EINVAL:
                 # An incomplete multibyte sequence has been
@@ -60,35 +59,37 @@ class Codec(codecs.Codec):
                     raise UnicodeError(*e.args)
                 if errors == "replace":
                     outres += u"\uFFFD"
-                    out1, len1 = self.decode(msg[inlen:], errors)
+                    out1, len1 = decode(msg[inlen:], errors)
                 elif errors == "ignore":
-                    out1, len1 = self.decode(msg[inlen:], errors)
+                    out1, len1 = decode(msg[inlen:], errors)
                 else:
                     raise ValueError("unsupported error handling")
                 return outres + out1, inlen + len1
 
+    return encode, decode
+
 
 def lookup(encoding):
-    class SpecialCodec(Codec):
-        pass
-
-    SpecialCodec.codeset = encoding
-
-    class Reader(SpecialCodec, codecs.StreamReader):
-        pass
-
-    class Writer(SpecialCodec, codecs.StreamWriter):
-        pass
-
     try:
-        return codecs.CodecInfo(
-            encode=SpecialCodec().encode,
-            decode=SpecialCodec().decode,
-            streamreader=Reader,
-            streamwriter=Writer,
-        )
+        encode, decode = codec_factory(encoding)
     except ValueError:
+        # Encoding not supported by iconv
         return None
+
+    class StreamWriter(codecs.StreamWriter):
+        nonlocal encode
+
+    class StreamReader(codecs.StreamReader):
+        nonlocal decode
+
+
+    return codecs.CodecInfo(
+        name=encoding,
+        encode=encode,
+        decode=decode,
+        streamreader=StreamReader,
+        streamwriter=StreamWriter,
+    )
 
 
 codecs.register(lookup)
