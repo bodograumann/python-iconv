@@ -1,5 +1,6 @@
 import unittest
 import iconvcodec
+import codecs
 
 
 class TestIconvcodecModule(unittest.TestCase):
@@ -15,3 +16,19 @@ class TestIconvcodecModule(unittest.TestCase):
         string = "abc ß α € àḃç"
         bytestring = string.encode("ASCII//TRANSLIT")
         self.assertEqual(bytestring, b"abc ss ? EUR abc")
+
+    def test_incremental_encode(self):
+        encoder = codecs.getincrementalencoder("ASCII//TRANSLIT")()
+        first = encoder.encode("Foo")
+        second = encoder.encode("bar", final=True)
+
+        self.assertEqual(first, b"Foo")
+        self.assertEqual(second, b"bar")
+
+    def test_incremental_decode(self):
+        decoder = codecs.getincrementaldecoder("UCS2")()
+        first = decoder.decode(b"\x41")
+        second = decoder.decode(b"\x01", final=True)
+
+        self.assertEqual(first, "")
+        self.assertEqual(second, "\u0141")
