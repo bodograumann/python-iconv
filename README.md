@@ -59,6 +59,25 @@ b"Hello".decode("T.61")
 "World".encode("JOHAB")
 ```
 
+Contributing
+------------
+
+Contributions are always welcome.
+Setting up a local dev environment is as simple as:
+
+```sh
+python -m venv env
+source env/bin/activate
+pip install -e .
+python -m unittest
+```
+
+Code should be auto-formatted with [black](https://black.readthedocs.io/en/stable/).
+```python
+pip install black
+black *.py
+```
+
 License
 -------
 This program is free software; you can redistribute it and/or modify
