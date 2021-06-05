@@ -8,6 +8,11 @@ class TestIconvcodecModule(unittest.TestCase):
         bytestring = "Hallo".encode("T.61")
         self.assertEqual(bytestring, b"Hallo")
 
+    def test_encode_with_long_out(self):
+        """Edge case where output has more bytes than input as utf-8"""
+        bytestring = "™".encode("ASCII//TRANSLIT")
+        self.assertEqual(bytestring, b"(TM)")
+
     def test_decode(self):
         string = b"Hallo".decode("T.61")
         self.assertEqual(string, "Hallo")
