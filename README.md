@@ -78,6 +78,16 @@ pip install black
 black *.py
 ```
 
+Publishing
+----------
+
+We currently only publish source distributions.
+```sh
+pip install twine
+python setup.py sdist
+twine upload dist/*
+```
+
 License
 -------
 This program is free software; you can redistribute it and/or modify
