@@ -163,7 +163,13 @@ PyInit_iconv(void)
 {
     PyObject *m, *d;
 
-    Py_TYPE(&Iconv_Type) = &PyType_Type;
+    #ifdef Py_SET_TYPE
+        // Available since python 3.9, required since python 3.11
+        Py_SET_TYPE(&Iconv_Type, &PyType_Type);
+    #else
+        // Fallback for python 3.6, 3.7 and 3.8
+        Py_TYPE(&Iconv_Type) = &PyType_Type;
+    #endif
     if (PyType_Ready(&Iconv_Type) < 0) {
         return NULL;
     }
