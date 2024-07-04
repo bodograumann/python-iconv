@@ -15,5 +15,5 @@ as well as a Python codec to convert between Unicode objects and
 all iconv-provided encodings.
 """,
     py_modules=["iconvcodec"],
-    ext_modules=[Extension("iconv", sources=["iconvmodule.c"])],
+    ext_modules=[Extension("iconv", sources=["iconvmodule.c"], libraries=['iconv'])],
 )
