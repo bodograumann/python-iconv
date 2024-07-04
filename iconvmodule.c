@@ -56,7 +56,7 @@ Iconv_iconv(IconvObject *self, PyObject *args, PyObject* kwargs)
 {
     PyObject *inbuf_obj;
     Py_buffer inbuf_view;
-    const char *inbuf;
+    char *inbuf;
     char *outbuf;
     size_t inbuf_size, outbuf_size, iresult;
     long int inbuf_size_int, outbuf_size_int = -1;
