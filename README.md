@@ -15,7 +15,8 @@ To install the module use
 
     pip install python-iconv
 
-This module package requires atleast Python 3.6.
+This module package requires at least Python 3.6, a corresponding version of
+libffi and the native iconv library.
 
 Module iconv
 ------------

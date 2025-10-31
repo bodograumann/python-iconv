@@ -2,7 +2,7 @@ import sys, iconv, codecs, errno
 
 
 _ENCODE_REPLACECHAR = "?".encode()
-_DECODE_REPLACECHAR = u"\uFFFD".encode()
+_DECODE_REPLACECHAR = "\ufffd".encode()
 
 
 def _iconv_encode_impl(encoder, msg, errors, bufsize=None):
