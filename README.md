@@ -17,6 +17,7 @@ To install the module use
 
 This module package requires at least Python 3.6, a corresponding version of
 libffi and the native iconv library.
+It is only tested with Python 3.8 and higher though.
 
 Module iconv
 ------------
