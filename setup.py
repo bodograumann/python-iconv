@@ -2,7 +2,7 @@ from setuptools import setup, Extension
 
 setup(
     name="python-iconv",
-    version="1.1.2",
+    version="1.1.3",
     description="iconv-based Unicode converter",
     author="Bodo Graumann",
     author_email="mail@bodograumann.de",
@@ -15,5 +15,5 @@ as well as a Python codec to convert between Unicode objects and
 all iconv-provided encodings.
 """,
     py_modules=["iconvcodec"],
-    ext_modules=[Extension("iconv", sources=["iconvmodule.c"])],
+    ext_modules=[Extension("iconv", sources=["iconvmodule.c"], libraries=["iconv"])],
 )
