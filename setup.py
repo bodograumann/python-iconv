@@ -10,7 +10,7 @@ else:
 
 setup(
     name="python-iconv",
-    version="1.1.3",
+    version="1.1.4",
     description="iconv-based Unicode converter",
     author="Bodo Graumann",
     author_email="mail@bodograumann.de",
