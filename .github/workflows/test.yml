@@ -55,5 +55,5 @@ jobs:
     - name: Run tests (Windows)
       if: runner.os == 'Windows'
       run: |
-        Copy-Item "libiconv\x64\Release\libiconv.dll" "iconv.dll"
+        Copy-Item "libiconv\x64\Release\libiconv.dll" "libiconv.dll"
         python -m unittest -v
