@@ -34,9 +34,14 @@ jobs:
     - name: Install dependencies (Windows)
       if: runner.os == 'Windows'
       run: |
-        vcpkg install libiconv:x64-windows --triplet x64-windows
-        echo "INCLUDE=C:\vcpkg\installed\x64-windows\include;$env:INCLUDE" >> $env:GITHUB_ENV
-        echo "LIB=C:\vcpkg\installed\x64-windows\lib;$env:LIB" >> $env:GITHUB_ENV
+        curl -L -o libiconv.zip https://github.com/pffang/libiconv-for-Windows/releases/download/1.18/libiconv-for-Windows_prebuilt.zip
+        Expand-Archive libiconv.zip -DestinationPath libiconv
+
+        $ppath = python -c "import sys; print(sys.base_prefix)"
+        Copy-Item "libiconv\iconv.h" "$ppath\include\"
+        New-Item -ItemType Directory -Force -Path "$ppath\libs"
+        Copy-Item "libiconv\x64\Release\libiconv.lib" "$ppath\libs\iconv.lib"
+        Copy-Item "libiconv\x64\Release\libiconv.dll" "$ppath\site-packages\"
 
     - name: Install package
       run: |
@@ -44,12 +49,4 @@ jobs:
         pip install -e .
 
     - name: Run tests
-      if: runner.os != 'Windows'
       run: python -m unittest -v
-
-    - name: Run tests (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        Copy-Item "C:\vcpkg\installed\x64-windows\bin\iconv-2.dll" "iconv.dll"
-        Copy-Item "C:\vcpkg\installed\x64-windows\bin\charset-1.dll" "charset-1.dll"
-        python -m unittest -v
