@@ -27,9 +27,13 @@ jobs:
         python-version: ${{ matrix.python-version }}
         allow-prereleases: true
 
-    - name: Install dependencies
+    - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: brew install libiconv
+
+    - name: Install dependencies (Windows)
+      if: runner.os == 'Windows'
+      run: vcpkg install libiconv
 
     - name: Install package
       run: |
