@@ -40,7 +40,7 @@ jobs:
         $ppath = python -c "import sys; print(sys.base_prefix)"
         Copy-Item "libiconv\iconv.h" "$ppath\include\"
         New-Item -ItemType Directory -Force -Path "$ppath\libs"
-        Copy-Item "libiconv\x64\Release\libiconv.lib" "$ppath\libs\iconv.lib"
+        Copy-Item "libiconv\x64\Release\libiconv.lib" "$ppath\libs\libiconv.lib"
         Copy-Item "libiconv\x64\Release\libiconv.dll" "$ppath\Lib\site-packages\"
 
     - name: Install package
