@@ -81,10 +81,11 @@ def _iconv_decode_impl(decoder, msg, errors, bufsize=None):
 
 def codec_factory(encoding):
     # Workaround for https://github.com/bodograumann/python-iconv/issues/4
-    _encoding = encoding \
-        .replace("_translit", "//TRANSLIT") \
-        .replace("_ignore", "//IGNORE") \
+    _encoding = (
+        encoding.replace("_translit", "//TRANSLIT")
+        .replace("_ignore", "//IGNORE")
         .replace("_non_identical_discard", "//NON_IDENTICAL_DISCARD")
+    )
 
     encoder = iconv.open(_encoding, "utf-8")
     decoder = iconv.open("utf-8", _encoding)
