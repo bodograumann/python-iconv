@@ -44,10 +44,13 @@ jobs:
         pip install -e .
 
     - name: Debug libiconv loc
+      if: runner.os == 'Windows'
       run: dir "C:\vcpkg\installed\x64-windows\bin"
 
     - name: Run tests
       run: |
         # XXX: This seems very hacky
+        Copy-Item "C:\vcpkg\installed\x64-windows\bin\iconv-2.dll" "C:\vcpkg\installed\x64-windows\bin\libiconv.dll"
         $env:PATH = "C:\vcpkg\installed\x64-windows\bin;$env:PATH"
+
         python -m unittest -v
