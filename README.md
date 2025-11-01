@@ -17,7 +17,7 @@ To install the module use
 
 This module package requires at least Python 3.6, a corresponding version of
 libffi and the native iconv library.
-It is only tested with Python 3.8 and higher though.
+It is only tested with Python 3.8 and higher.
 
 Module iconv
 ------------
@@ -39,7 +39,7 @@ It is the caller's responsibility to guarantee that the internal
 representation of the `in` object indeed uses fromcode of the `Iconv`
 object. The parameter `outlen` represents an estimate of the resulting
 string size in bytes.
-If the buffer is to small, an exception is thrown. If `count_only` is set,
+If the buffer is too small, an exception is thrown. If `count_only` is set,
 no conversion is attempted, but the number of necessary bytes is
 returned.
 
@@ -94,7 +94,7 @@ License
 -------
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 3 of the License, or
+the Free Software Foundation; either version 3 of the License or
 (at your option) any later version.
 
 Author
