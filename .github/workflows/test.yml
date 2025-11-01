@@ -34,19 +34,20 @@ jobs:
     - name: Install dependencies (Windows)
       if: runner.os == 'Windows'
       run: |
-        vcpkg install libiconv
+        vcpkg install libiconv:x64-windows --triplet x64-windows
         echo "INCLUDE=C:\vcpkg\installed\x64-windows\include;$env:INCLUDE" >> $env:GITHUB_ENV
         echo "LIB=C:\vcpkg\installed\x64-windows\lib;$env:LIB" >> $env:GITHUB_ENV
-        
-        # XXX: This seems very hacky
-        echo "C:\vcpkg\installed\x64-windows\bin" >> $env:GITHUB_PATH
-
 
     - name: Install package
       run: |
         python -m pip install --upgrade pip
         pip install -e .
 
+    - name: Debug libiconv loc
+      run: dir "C:\vcpkg\installed\x64-windows\bin"
+
     - name: Run tests
       run: |
+        # XXX: This seems very hacky
+        $env:PATH = "C:\vcpkg\installed\x64-windows\bin;$env:PATH"
         python -m unittest -v
