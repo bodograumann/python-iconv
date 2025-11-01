@@ -6,7 +6,7 @@ import sys
 if sys.platform.startswith('linux'):
     libraries = []
 else:
-    libraries = ["libiconv"]
+    libraries = ["iconv"]
 
 setup(
     name="python-iconv",
