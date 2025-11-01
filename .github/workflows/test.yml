@@ -49,11 +49,4 @@ jobs:
         pip install -e .
 
     - name: Run tests
-      if: runner.os != 'Windows'
       run: python -m unittest -v
-
-    - name: Run tests (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        Copy-Item "libiconv\x64\Release\libiconv.dll" "libiconv.dll"
-        python -m unittest -v
