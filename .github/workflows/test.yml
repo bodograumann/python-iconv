@@ -43,16 +43,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -e .
 
-    - name: Debug libiconv loc
-      if: runner.os == 'Windows'
-      run: dir "C:\vcpkg\installed\x64-windows\bin"
+    - name: Run tests
+      if: runner.os != 'Windows'
+      run: python -m unittest -v
 
-    # XXX: This feels a bit hacky
-    - name: Setup DLLs (Windows)
+    - name: Run tests (Windows)
       if: runner.os == 'Windows'
       run: |
-        Copy-Item "C:\vcpkg\installed\x64-windows\bin\iconv-2.dll" "C:\vcpkg\installed\x64-windows\bin\iconv.dll"
-        echo "C:\vcpkg\installed\x64-windows\bin" >> $env:GITHUB_PATH
-
-    - name: Run tests
-      run: python -m unittest -v
+        Copy-Item "C:\vcpkg\installed\x64-windows\bin\iconv-2.dll" "iconv.dll"
+        Copy-Item "C:\vcpkg\installed\x64-windows\bin\charset-1.dll" "charset-1.dll"
+        python -m unittest -v
