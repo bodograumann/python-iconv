@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "python-iconv"
+version = "1.1.4"
+description = "iconv-based Unicode converter"
+readme = "README.md"
+requires-python = ">=3.6"
+license = "GPL-3.0-or-later"
+maintainers = [
+    {name = "Bodo Graumann", email = "mail@bodograumann.de"}
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX",
+    "Programming Language :: C",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+keywords = ["iconv", "codec", "encoding", "unicode"]
+
+[project.urls]
+Homepage = "https://github.com/bodograumann/python-iconv"
+Repository = "https://github.com/bodograumann/python-iconv"
+Issues = "https://github.com/bodograumann/python-iconv/issues"
+
+[tool.setuptools]
+py-modules = ["iconvcodec"]
