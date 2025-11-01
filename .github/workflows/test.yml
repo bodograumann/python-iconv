@@ -27,9 +27,21 @@ jobs:
         python-version: ${{ matrix.python-version }}
         allow-prereleases: true
 
-    - name: Install dependencies
+    - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: brew install libiconv
+
+    - name: Install dependencies (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        curl -L -o libiconv.zip https://github.com/pffang/libiconv-for-Windows/releases/download/1.18/libiconv-for-Windows_prebuilt.zip
+        Expand-Archive libiconv.zip -DestinationPath libiconv
+
+        $ppath = python -c "import sys; print(sys.base_prefix)"
+        Copy-Item "libiconv\iconv.h" "$ppath\include\"
+        New-Item -ItemType Directory -Force -Path "$ppath\libs"
+        Copy-Item "libiconv\x64\Release\libiconv.lib" "$ppath\libs\iconv.lib"
+        Copy-Item "libiconv\x64\Release\libiconv.dll" "$ppath\Lib\site-packages\"
 
     - name: Install package
       run: |
@@ -37,5 +49,11 @@ jobs:
         pip install -e .
 
     - name: Run tests
+      if: runner.os != 'Windows'
+      run: python -m unittest -v
+
+    - name: Run tests (Windows)
+      if: runner.os == 'Windows'
       run: |
+        Copy-Item "libiconv\x64\Release\libiconv.dll" "libiconv.dll"
         python -m unittest -v
