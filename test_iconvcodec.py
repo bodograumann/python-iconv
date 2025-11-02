@@ -45,3 +45,10 @@ class TestIconvcodecModule(unittest.TestCase):
 
         self.assertEqual(first, "")
         self.assertEqual(second, "\u0141")
+
+    def test_invalid_errors(self):
+        with self.assertRaisesRegex(ValueError, "unsupported error handling"):
+            "™".encode("ASCII//TRANSLIT", "WRONG")
+
+        with self.assertRaisesRegex(ValueError, "unsupported error handling"):
+            b"a".decode("ASCII//TRANSLIT", "WRONG")

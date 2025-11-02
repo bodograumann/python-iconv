@@ -39,8 +39,6 @@ def _iconv_encode_impl(encoder, msg, errors, bufsize=None):
                 out1, len1 = _iconv_encode_impl(
                     encoder, msg[inlen:].decode()[1:].encode(), errors
                 )
-            else:
-                raise ValueError("unsupported error handling")
             return outres + out1, inlen + len1 + 1
         raise
 
@@ -74,8 +72,6 @@ def _iconv_decode_impl(decoder, msg, errors, bufsize=None):
                 out1, len1 = _iconv_decode_impl(decoder, msg[inlen + 1 :], errors)
             elif errors == "ignore":
                 out1, len1 = _iconv_decode_impl(decoder, msg[inlen + 1 :], errors)
-            else:
-                raise ValueError("unsupported error handling")
             return outres.decode() + out1, inlen + len1 + 1
 
 
@@ -93,9 +89,15 @@ def codec_factory(encoding):
     def encode(inp, errors="strict"):
         msg = inp.encode()
 
+        if errors not in ("strict", "replace", "ignore"):
+            raise ValueError("unsupported error handling")
+
         return _iconv_encode_impl(encoder, msg, errors)
 
     def decode(msg, errors="strict"):
+        if errors not in ("strict", "replace", "ignore"):
+            raise ValueError("unsupported error handling")
+
         return _iconv_decode_impl(decoder, msg, errors)
 
     return encode, decode
