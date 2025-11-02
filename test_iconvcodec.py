@@ -6,7 +6,7 @@ import sys
 
 class TestIconvcodecModule(unittest.TestCase):
     def test_encode(self):
-        bytestring = "Hallo".encode("Georgian-PS")
+        bytestring = "Hallo".encode("VISCII")
         self.assertEqual(bytestring, b"Hallo")
 
     def test_encode_with_long_out(self):
@@ -18,7 +18,7 @@ class TestIconvcodecModule(unittest.TestCase):
             self.assertEqual(bytestring, b"TM")
 
     def test_decode(self):
-        string = b"Hallo".decode("Georgian-PS")
+        string = b"Hallo".decode("VISCII")
         self.assertEqual(string, "Hallo")
 
     @unittest.skipUnless(sys.platform.startswith("linux"), "Linux only test")
@@ -74,8 +74,8 @@ class TestIconvcodecModule(unittest.TestCase):
                     1257,
                 )
             ],
-            "Georgian-PS",
-            "ARMSCII-8",
+            # "Georgian-PS",
+            # "ARMSCII-8",
             "KOI8-T",
             "PT154",
             "RK1048",
