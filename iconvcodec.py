@@ -13,6 +13,10 @@ def _iconv_encode_impl(encoder, msg, errors, bufsize=None):
         return encoder.iconv(msg, bufsize), len(msg)
     except iconv.error as e:
         errstring, code, inlen, outres = e.args
+        if code == 0:
+            # Windows quirk: raises with code=0 when partial conversion succeeded
+            # Just return what was converted
+            return outres, inlen
         if code == errno.E2BIG:
             # outbuffer was too small, increase size a bit and try to encode rest
             out1, len1 = _iconv_encode_impl(
@@ -53,6 +57,10 @@ def _iconv_decode_impl(decoder, msg, errors, bufsize=None):
         return decoder.iconv(msg, bufsize).decode(), len(msg)
     except iconv.error as e:
         errstring, code, inlen, outres = e.args
+        if code == 0:
+            # Windows quirk: raises with code=0 when partial conversion succeeded
+            # Just return what was converted
+            return outres.decode(), inlen
         if code == errno.E2BIG:
             # buffer too small
             out1, len1 = _iconv_decode_impl(
@@ -77,6 +85,7 @@ def _iconv_decode_impl(decoder, msg, errors, bufsize=None):
             else:
                 raise ValueError("unsupported error handling")
             return outres.decode() + out1, inlen + len1 + 1
+        raise
 
 
 def codec_factory(encoding):

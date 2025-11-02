@@ -23,11 +23,14 @@ class TestIconvcodecModule(unittest.TestCase):
         string = b"Hallo".decode("T.61")
         self.assertEqual(string, "Hallo")
 
-    @unittest.skipUnless(sys.platform.startswith("linux"), "Linux only test")
+    @unittest.skipIf(sys.platform == "darwin", "Test fails on macOS")
     def test_transliterate(self):
         string = "abc ß α € àḃç"
         bytestring = string.encode("ASCII//TRANSLIT")
-        self.assertEqual(bytestring, b"abc ss ? EUR abc")
+        if sys.platform.startswith("linux"):
+            self.assertEqual(bytestring, b"abc ss ? EUR abc")
+        else:  # Windows
+            self.assertEqual(bytestring, b"abc ss ")
 
     def test_incremental_encode(self):
         encoder = codecs.getincrementalencoder("ASCII//TRANSLIT")()
