@@ -88,3 +88,10 @@ class TestIconvcodecModule(unittest.TestCase):
                 codec_info = iconvcodec.lookup(encoding)
                 if codec_info is None:
                     self.fail(f"Unsupported codec: '{encoding}'")
+                # Actually test that encoding works
+                try:
+                    "a".encode(encoding)
+                except Exception as e:
+                    raise AssertionError(
+                        f"Codec lookup succeeded but encode failed for '{encoding}'"
+                    ) from None
