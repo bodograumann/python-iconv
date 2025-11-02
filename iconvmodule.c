@@ -189,6 +189,9 @@ PyInit_iconv(void)
     /* Add some symbolic constants to the module */
     d = PyModule_GetDict(m);
     error = PyErr_NewException("iconv.error", PyExc_ValueError, NULL);
+    if (error == NULL) {
+        return NULL;
+    }
     PyDict_SetItemString(d, "error", error);
 
     return m;
