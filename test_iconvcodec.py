@@ -47,7 +47,7 @@ class TestIconvcodecModule(unittest.TestCase):
     def test_available_encodings(self):
         # Some from the list on https://www.gnu.org/software/libiconv/
         encodings = (
-            *[f"ISO-8859-{i}" for i in (1, 2, 3, 4, 5, 7, 9, 10, 13, 14, 15, 16)],
+            *[f"ISO-8859-{i}" for i in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 16)],
             *[
                 f"CP{i}"
                 for i in (
