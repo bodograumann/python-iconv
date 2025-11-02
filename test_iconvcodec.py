@@ -23,7 +23,7 @@ class TestIconvcodecModule(unittest.TestCase):
         string = b"Hallo".decode("T.61")
         self.assertEqual(string, "Hallo")
 
-    @unittest.skipIf(sys.platform.startswith("mac"), "Test fails on macOS")
+    @unittest.skipIf(sys.platform == "darwin", "Test fails on macOS")
     def test_transliterate(self):
         string = "abc ß α € àḃç"
         bytestring = string.encode("ASCII//TRANSLIT")
